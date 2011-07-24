@@ -1,8 +1,10 @@
 json-anything
 ----------------
 
-Scrape any webpage and returns a JSON object
-Takes parameters from GET or POST
+PHP proxy that converts webpages to json objects, filtered by jquery-like selectors.
+
+Takes parameters from GET or POST.
+
 Think of it as a 'shotgun api'.
 
 Copyright (c) 2011 Nicolas Noben. see LICENSE (MIT).
@@ -10,47 +12,48 @@ Copyright (c) 2011 Nicolas Noben. see LICENSE (MIT).
 ##Parameters:
 
 ###debug:
-This is a flag. If set, it will var_dump the results for improved readibility.
-if not, a json-encoded object is returned.
+**This is a debug flag.**
+
+If set, it will var_dump the results for improved readibility. If not, a json-encoded object is returned.
 
 ###url:
-the url to go scrape and make JSON from.
+**The url to go scrape and make JSON from.**
 
-**NOTE:** for complex urls already using GET (ie. some search engines) you can POST url instead.
+For complex urls already using GET (ie. some search engines) you can POST url instead.
 
-**EXAMPLE:**
+**EXAMPLE**
+
 	?url=http://www.bom.gov.au/
 
 
 ###sel:
 
-comma separated list of selectors, in a jQuery fashion (although they're used by PHPQuery)
+**Comma separated list of selectors, in a jQuery fashion**
 
-**NOTE:** PHP can't parse # from a url as it's never sent to the server ('url fragments'). Because of this, use % instead.
+PHP can't parse # from a url as it's never sent to the server ('url fragments'). Because of this, use % instead.
 
-**NOTE:** You can, but are not forced to, use two underscores (__) for a space (so it doesn't look like %20)
+You can, but are not forced to, use two underscores (__) for a space (so it doesn't look like %20)
 
-**NOTE:** Get attributes by using a '|'
+Get attributes by using a '|'
 
 By default it will return 'text()'
+
 	a        ---> will return all text of the A tags
 	a|html   ---> will return all html contents of the A tags
 	a|href   ---> will return all href attribute of the A tags
 	img|src  ---> will return all src attribute of the img tags
 
-
-**EXAMPLES:**
+**EXAMPLES**
 
 	span.hey ---> will return all spans with class hey
 	span%hey ---> will return all spans with id hey (I know)
-
 	div%pad table:first a ---> div#pad table:first a
 
 Complex Example using __ instead of space:
+
 Within #results, will return the 4th column, 2nd span, b's html
 
 	%results__td:nth-child(4)__span:nth-child(2)__b|html :
-
 
 **FULL EXAMPLE:**
 Get the latest currency prices from Reuters

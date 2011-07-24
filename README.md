@@ -58,7 +58,7 @@ Within #results, will return the 4th column, 2nd span, b's html
 	%results__td:nth-child(4)__span:nth-child(2)__b|html :
 
 **FULL EXAMPLE:**
-Get the latest currency prices from Reuters
+Get the latest currencies quotes from Reuters
 
 	index.php?url=http://uk.reuters.com/business/currencies&sel=%currPairs__td:first-child__a,%currPairs__td:first-child__a|href,%currPairs__td:nth- child(2)
 

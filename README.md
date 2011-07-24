@@ -113,9 +113,9 @@ There is an unofficial api but anyway, this works too.
 
 ###Australia Bureau of Meteorology (bom)
 
-The bom is reknown for not having decent a api. Worse, it's producing badly documented text webpages.
+The bom is reknown for not having decent a api. 
 
-Take a look at its home page [[http://www.bom.gov.au/]]... We're going to grab the Forecast as presented for the major cities.
+Take a look at its home page http://www.bom.gov.au/ ... We're going to grab the Forecast as presented for the major cities.
 
 	http://localhost/json-anything/?url=http://www.bom.gov.au/&sel=%pad__table:first__a,%pad__table:first__.max,%pad__table:first__td:last-child
 

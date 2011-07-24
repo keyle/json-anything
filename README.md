@@ -30,7 +30,9 @@ For complex urls already using GET (ie. some search engines) you can POST url in
 
 **Comma separated list of selectors, in a jQuery fashion**
 
-PHP can't parse # from a url as it's never sent to the server ('url fragments'). Because of this, use % instead.
+PHP can't parse # from a url as it's never sent to the server ('url fragments'). 
+
+Because of this, **use % instead of #**.
 
 You can, but are not forced to, use two underscores (__) for a space (so it doesn't look like %20)
 

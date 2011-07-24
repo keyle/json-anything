@@ -57,7 +57,7 @@ Complex Example using __ instead of space:
 
 Within #results, will return the 4th column, 2nd span, b's html
 
-	%results__td:nth-child(4)__span:nth-child(2)__b|html :
+	%results__td:nth-child(4)__span:nth-child(2)__b|html
 
 ##Real world examples
 

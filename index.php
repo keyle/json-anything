@@ -4,7 +4,7 @@
 * Scrape any webpage and returns a JSON object
 *
 * @version 1.0
-* @author Nicolas 'keyle' Noben
+* @author Nicolas Noben (@keyle)
 * @license MIT License
 *
 * See README for syntax

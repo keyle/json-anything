@@ -7,7 +7,14 @@
 //header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 //header('Content-type: application/json');
 
-function filterNasty($stuff) { return filter_var(htmlspecialchars(pg_escape_string($stuff)), FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH); }
+function filterNasty($stuff) {
+	return filter_var(
+			htmlspecialchars(
+				pg_escape_string($stuff)
+			),
+			FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH
+		);
+}
 
 require_once('phpQuery-onefile.php');
 
@@ -16,7 +23,7 @@ if(!$_GET['url']) die('give a url param.');
 $_GET['url'] = filterNasty($_GET['url']);
 $url = $_GET['url'];
 
-if(!$_GET['s1']) die("give at least 1 selector ie ...?s1='.class a'");
+if(!$_GET['s1']) die("give at least 1 selector, ie. ...?s1=.class a");
 
 $_GET['s1'] = filterNasty($_GET['s1']);
 $s1 = $_GET['s1'];
@@ -26,7 +33,7 @@ $selector1 = explode('|', $s1);
 if(count($selector1) < 2)
 	$selector1[1] = null;
 
-$output = file_get_contents('http://'.$url) or die('Could not access file: $url');
+$output = file_get_contents('http://'.$url) or die('Could not access: ?url=...');
 
 phpQuery::newDocument($output);
 
@@ -50,7 +57,9 @@ function filterThis($selector, $attribute = null)
 
 	foreach(pq($selector) as $item)
 	{
-		$attribute == null ? array_push($arr, pq($item)->html()) : 	array_push($arr, pq($item)->attr($attribute));
+		$attribute == null ?
+		array_push($arr, pq($item)->html()) :
+		array_push($arr, pq($item)->attr($attribute));
 	}
 
 	return $arr;

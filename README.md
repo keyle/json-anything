@@ -97,8 +97,6 @@ Take a look at its home page [[http://www.bom.gov.au/]]... We're going to grab t
 	%pad__table:first__.max, (the maximas, has class .max)
 	%pad__table:first__td:last-child (grab the last TD of the first table)
 
-result (\u00b0 is the unicode for the DEGREE sign)
-
 	{
 	  "url":"http://www.bom.gov.au/",
 	  "sel":"#pad table:first a,#pad table:first .max,#pad table:first td:last-child",
@@ -145,6 +143,34 @@ result (\u00b0 is the unicode for the DEGREE sign)
 	    ]
 	  ]
 	}
+
+(\u00b0 is the unicode for the DEGREE sign)
+
+###Hacker News quick feed ;-)
+
+	http://localhost/json-anything/?url=http://news.ycombinator.com/&sel=.title__a:first-child,.title__a:first-child|href
+
+	{
+	  "url":"http://news.ycombinator.com/",
+	  "sel":".title a:first-child,.title a:first-child|href",
+	  "results":[
+	    [
+	      "Octopress - A blogging framework for hackers",
+	      "http://octopress.org/"
+	    ],
+	    [
+	      "NoSQL is What?",
+	      "http://blog.zawodny.com/2011/07/23/nosql-is-what/"
+	    ],
+	    [
+	      "Radio Shack to start stocking Arduino, Other Goodies",
+	      "http://blog.radioshack.com/2011/07/21/top-ten-diy-suggestions-from-you/"
+	    ],
+
+	    ...
+	  ]
+	}
+
 
 ##Feel free to improve
 

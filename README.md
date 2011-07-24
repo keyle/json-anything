@@ -59,8 +59,9 @@ Within #results, will return the 4th column, 2nd span, b's html
 
 	%results__td:nth-child(4)__span:nth-child(2)__b|html :
 
-**FULL EXAMPLE:**
-1- Get the latest currencies quotes from Reuters
+##Real world examples
+
+###Latest currencies $ from Reuters
 
 	index.php?url=http://uk.reuters.com/business/currencies&sel=%currPairs__td:first-child__a,%currPairs__td:first-child__a|href,%currPairs__td:nth- child(2)
 
@@ -83,7 +84,7 @@ Within #results, will return the 4th column, 2nd span, b's html
 	  ]
 	}
 
-2- Australia Bureau of Meteorology (bom)
+###Australia Bureau of Meteorology (bom)
 
 The bom is reknown for not having decent a api. Worse, it's producing badly documented text webpages.
 

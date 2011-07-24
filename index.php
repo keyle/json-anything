@@ -1,91 +1,89 @@
 <?php
+/**
+* JSON-ANYTHING
+* Scrape any webpage and returns a JSON object
+*
+* @version 1.0
+* @author Nicolas 'keyle' Noben
+* @license MIT License
+*
+* See README for syntax
+*
+**/
+
 header('Cache-Control: no-cache, must-revalidate');
 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 header('Content-type: application/json');
-
-function filterNasty($stuff) {
-	return filter_var
-	(
-		htmlspecialchars
-		(
-			pg_escape_string
-			(
-				strip_tags($stuff)
-			)
-		), FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH
-	);
-}
-
 ini_set('user_agent', 'Mozilla/5.0 (Windows NT 6.1; U; ru; rv:5.0.1.6) Gecko/20110501 Firefox/5.0.1 Firefox/5.0.1');
-
 require_once('phpQuery-onefile.php');
 
-if(!$_REQUEST['url']) die('give a url param.');
 
-$_REQUEST['url'] = filterNasty($_REQUEST['url']);
-$url = $_REQUEST['url'];
 
-if(!$_REQUEST['sel']) die("give at least 1 selector, ie. ...?sel=.class__a");
-
-$_REQUEST['sel'] = filterNasty($_REQUEST['sel']);
-$sel = $_REQUEST['sel'];
-
+// Cleaning Request Parameters (url, sel for selectors, debug for debug flag)
 $debug = isset($_REQUEST['debug']) ? true : false;
-
+$url = parseParam('url');
+$sel = parseParam('sel');
 $sel = replaceThisByThatInThat('__', ' ', $sel);
 $sel = replaceThisByThatInThat('%', '#', $sel);
+$array_selectors = getIndividiualSelectors($sel);
+$array_selectors = separateSelectorsAndAttributes($array_selectors);
 
-$selectorsArr = explode(',', $sel);
 
-for ($i=0; $i < count($selectorsArr); $i++)
-{
-	$selectorsArr[$i] = explode('|', $selectorsArr[$i]);
-
-	if(count($selectorsArr[$i]) < 2)
-		$selectorsArr[$i][1] = null;
-}
-
-/*
-$hasQuotes = strpos($url, '\'');
-
-if ($hasQuotes !== false) {
-	$url = replaceThisByThatInThat('\'', '', $url);
-}
-
-$hasDoubleQuotes = strpos($url, '\"');
-
-if ($hasDoubleQuotes !== false) {
-	$url = replaceThisByThatInThat('\"', '', $url);
-}*/
-
-$output = file_get_contents($url) or die('Could not access: ?url=...');
-
+// Get the page and do the filtering
+$output = file_get_contents($url);
 phpQuery::newDocument($output);
+$oneAfterTheOtherArrays = phpQueryFilterAllSelectors($array_selectors);
+$ordered = dumbMergeArrays($oneAfterTheOtherArrays);
 
 
-$mess = filterAll($selectorsArr);
-
-$clean = rearrange($mess);
-
+// Create JSON output
 $output = new stdClass();
 $output->url = replaceThisByThatInThat('\\','',$url);
 $output->sel = $sel;
+$output->results = $ordered;
 
-$output->results = $clean;
-
-$encoded = json_encode($output);
-
-$encoded = replaceThisByThatInThat('\\/', '/', $encoded);
+$json_encoded_string = json_encode($output);
+$json_encoded_string = replaceThisByThatInThat('\\/', '/', $json_encoded_string);
 
 
 if($debug)
-{
 	var_dump($output);
+else
+	echo($json_encoded_string);
+
+
+
+function parseParam($param)
+{
+	if(!$_REQUEST[$param])
+		die('MISSING parameter: ' . $param);
+
+	return filterNastyStuff($_REQUEST[$param]);
 }
-else echo( $encoded );
 
+function getIndividiualSelectors($commaDelimited)
+{
+	return explode(',', $commaDelimited);
+}
 
-function filterAll($selectors)
+function separateSelectorsAndAttributes($array_selectors)
+{
+	for ($i=0; $i < count($array_selectors); $i++)
+	{
+		$array_selectors[$i] = explode('|', $array_selectors[$i]);
+
+		if(count($array_selectors[$i]) < 2)
+			$array_selectors[$i][1] = null;
+	}
+
+	return $array_selectors;
+}
+
+// WARNING: not great.
+// if - for example - we're getting titles and links, and one of the results does not have a link, this will skip a beat!!
+// in other words, the final JSON results might skip a beat if one of the selectors, parsing the page, is not found
+// results can get out of whack quickly.
+function phpQueryFilterAllSelectors($selectors)
 {
 	$all = array();
 
@@ -97,8 +95,37 @@ function filterAll($selectors)
 	return $all;
 }
 
-// takes arrays[0][X] and arrays[1][X] to arrays[X][0,1]
-function rearrange($arrays)
+// does a phpQuery applying the selector, with conditions on the attribute
+function filterThis($selector, $attribute = null)
+{
+	$arr = array();
+
+	foreach(pq($selector) as $item)
+	{
+		if($attribute == null) // if no attribute, return text by default
+		{
+			array_push($arr, rtrim(ltrim(pq($item)->text())));
+		}
+		else if($attribute == 'html') // if html, return html content
+		{
+			array_push($arr, rtrim(ltrim(pq($item)->html())));
+		}
+		else // otherwise we've been give an attribute (src, href, alt, title...)
+			array_push($arr, pq($item)->attr($attribute));
+	}
+
+	return $arr;
+}
+
+// takes arrays[0][X] and arrays[1][X], return arrays[X][0,1]
+// Warning: FRAGILE! phpQueryFilterAllSelectors probably needs to be smarter.
+// used when we have more than one selector, the results arrays are given one selector at a time
+// we use it to merge so that titles and links (for example) go together.
+// example:
+// takes   [ [title, title, title], [link, link, link], [name, name, name] ]
+// returns [ [title, link, name], [title, link, name], [title, link, name] ]
+// Warning: Dumb code! if one of the link is missing, it will skip a beat!
+function dumbMergeArrays($arrays)
 {
 	$result = array();
 	$temp = array();
@@ -108,8 +135,6 @@ function rearrange($arrays)
 		$temp = array_merge($temp, $onearr);
 	}
 
-	//$temp = array_merge($arrays[0], $arrays[1]);
-
 	$nominal_length = count($arrays[0]);
 	$total_arrays = count($arrays);
 
@@ -118,7 +143,7 @@ function rearrange($arrays)
 		for ($j=0; $j < $total_arrays; $j++)
 		{
 			try {
-				$result[$i][$j] = $temp[$i+($nominal_length*$j)];
+				$result[$i][$j] = $temp[ $i + ($nominal_length * $j) ];
 			} catch(Exception $e) {}
 		}
 	}
@@ -126,31 +151,24 @@ function rearrange($arrays)
 	return $result;
 }
 
-
-function filterThis($selector, $attribute = null)
-{
-	$arr = array();
-
-	foreach(pq($selector) as $item)
-	{
-		if($attribute == null)
-		{
-			array_push($arr, rtrim(ltrim(pq($item)->text())));
-		}
-		else if($attribute == 'html')
-		{
-			array_push($arr, rtrim(ltrim(pq($item)->html())));
-		}
-		else
-			array_push($arr, pq($item)->attr($attribute));
-	}
-
-	return $arr;
-}
-
+// simple shorthand for the obfuscated str_replace
 function replaceThisByThatInThat($this, $byThat, $inThat)
 {
 	return str_replace($this, $byThat, $inThat);
+}
+
+// killing a bird with a shotgun - improve me if you can
+function filterNastyStuff($stuff) {
+	return filter_var
+	(
+		htmlspecialchars
+		(
+			pg_escape_string
+			(
+				strip_tags($stuff)
+			)
+		), FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH
+	);
 }
 
 ?>

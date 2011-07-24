@@ -61,6 +61,31 @@ Within #results, will return the 4th column, 2nd span, b's html
 
 ##Real world examples
 
+###Hacker News quick feed ;-)
+
+	http://localhost/json-anything/?url=http://news.ycombinator.com/&sel=.title__a:first-child,.title__a:first-child|href
+
+	{
+	  "url":"http://news.ycombinator.com/",
+	  "sel":".title a:first-child,.title a:first-child|href",
+	  "results":[
+	    [
+	      "Octopress - A blogging framework for hackers",
+	      "http://octopress.org/"
+	    ],
+	    [
+	      "NoSQL is What?",
+	      "http://blog.zawodny.com/2011/07/23/nosql-is-what/"
+	    ],
+	    [
+	      "Radio Shack to start stocking Arduino, Other Goodies",
+	      "http://blog.radioshack.com/2011/07/21/top-ten-diy-suggestions-from-you/"
+	    ],
+
+	    ...
+	  ]
+	}
+
 ###Latest currencies $ from Reuters
 
 	index.php?url=http://uk.reuters.com/business/currencies&sel=%currPairs__td:first-child__a,%currPairs__td:first-child__a|href,%currPairs__td:nth- child(2)
@@ -116,61 +141,12 @@ Take a look at its home page [[http://www.bom.gov.au/]]... We're going to grab t
 	      "23\u00b0",
 	      "Fine."
 	    ],
-	    [
-	      "Perth",
-	      "19\u00b0",
-	      "Shower or two increasing later."
-	    ],
-	    [
-	      "Adelaide",
-	      "15\u00b0",
-	      "Shower or two."
-	    ],
-	    [
-	      "Hobart",
-	      "11\u00b0",
-	      "Morning frost then showers."
-	    ],
-	    [
-	      "Canberra",
-	      "10\u00b0",
-	      "Shower or two clearing."
-	    ],
-	    [
-	      "Darwin",
-	      "30\u00b0",
-	      "Sunny."
-	    ]
-	  ]
-	}
-
-(\u00b0 is the unicode for the DEGREE sign)
-
-###Hacker News quick feed ;-)
-
-	http://localhost/json-anything/?url=http://news.ycombinator.com/&sel=.title__a:first-child,.title__a:first-child|href
-
-	{
-	  "url":"http://news.ycombinator.com/",
-	  "sel":".title a:first-child,.title a:first-child|href",
-	  "results":[
-	    [
-	      "Octopress - A blogging framework for hackers",
-	      "http://octopress.org/"
-	    ],
-	    [
-	      "NoSQL is What?",
-	      "http://blog.zawodny.com/2011/07/23/nosql-is-what/"
-	    ],
-	    [
-	      "Radio Shack to start stocking Arduino, Other Goodies",
-	      "http://blog.radioshack.com/2011/07/21/top-ten-diy-suggestions-from-you/"
-	    ],
 
 	    ...
 	  ]
 	}
 
+(\u00b0 is the unicode for the DEGREE sign)
 
 ##Feel free to improve
 

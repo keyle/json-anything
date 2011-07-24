@@ -61,7 +61,9 @@ Within #results, will return the 4th column, 2nd span, b's html
 
 ##Real world examples
 
-###Hacker News quick feed ;-)
+###Hacker News
+
+There is an unofficial api but anyway, this works too.
 
 	http://localhost/json-anything/?url=http://news.ycombinator.com/&sel=.title__a:first-child,.title__a:first-child|href
 

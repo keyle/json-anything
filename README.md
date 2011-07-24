@@ -5,9 +5,9 @@ PHP proxy that converts webpages to json objects, filtered by jquery-like select
 
 Takes parameters from GET or POST.
 
-Think of it as a 'shotgun api'.
+Think of it as a **'shotgun api'**. Because many sites still don't provide apis.
 
-Copyright (c) 2011 Nicolas Noben. see LICENSE (MIT).
+MIT LICENSE.
 
 ##Parameters:
 

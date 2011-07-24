@@ -12,11 +12,13 @@ MIT LICENSE.
 ##Parameters:
 
 ###debug:
+
 **This is a debug flag.**
 
 If set, it will var_dump the results for improved readibility. If not, a json-encoded object is returned.
 
 ###url:
+
 **The url to go scrape and make JSON from.**
 
 For complex urls already using GET (ie. some search engines) you can POST url instead.
@@ -30,7 +32,7 @@ For complex urls already using GET (ie. some search engines) you can POST url in
 
 **Comma separated list of selectors, in a jQuery fashion**
 
-PHP can't parse # from a url as it's never sent to the server ('url fragments'). 
+PHP can't parse # from a url as it's never sent to the server ('url fragments').
 
 Because of this, **use % instead of #**.
 
@@ -58,7 +60,7 @@ Within #results, will return the 4th column, 2nd span, b's html
 	%results__td:nth-child(4)__span:nth-child(2)__b|html :
 
 **FULL EXAMPLE:**
-Get the latest currencies quotes from Reuters
+1- Get the latest currencies quotes from Reuters
 
 	index.php?url=http://uk.reuters.com/business/currencies&sel=%currPairs__td:first-child__a,%currPairs__td:first-child__a|href,%currPairs__td:nth- child(2)
 
@@ -80,3 +82,71 @@ Get the latest currencies quotes from Reuters
 	    ...
 	  ]
 	}
+
+2- Australia Bureau of Meteorology (bom)
+
+The bom is reknown for not having decent a api. Worse, it's producing badly documented text webpages.
+
+Take a look at its home page [[http://www.bom.gov.au/]]... We're going to grab the Forecast as presented for the major cities.
+
+	http://localhost/json-anything/?url=http://www.bom.gov.au/&sel=%pad__table:first__a,%pad__table:first__.max,%pad__table:first__td:last-child
+
+	url=http://www.bom.gov.au/
+	%pad__table:first__a, (grab the #pad then the first table's A tags text)
+	%pad__table:first__.max, (the maximas, has class .max)
+	%pad__table:first__td:last-child (grab the last TD of the first table)
+
+result (\u00b0 is the unicode for the DEGREE sign)
+
+	{
+	  "url":"http://www.bom.gov.au/",
+	  "sel":"#pad table:first a,#pad table:first .max,#pad table:first td:last-child",
+	  "results":[
+	    [
+	      "Sydney",
+	      "17\u00b0",
+	      "Possible shower clearing."
+	    ],
+	    [
+	      "Melbourne",
+	      "14\u00b0",
+	      "Shower or two."
+	    ],
+	    [
+	      "Brisbane",
+	      "23\u00b0",
+	      "Fine."
+	    ],
+	    [
+	      "Perth",
+	      "19\u00b0",
+	      "Shower or two increasing later."
+	    ],
+	    [
+	      "Adelaide",
+	      "15\u00b0",
+	      "Shower or two."
+	    ],
+	    [
+	      "Hobart",
+	      "11\u00b0",
+	      "Morning frost then showers."
+	    ],
+	    [
+	      "Canberra",
+	      "10\u00b0",
+	      "Shower or two clearing."
+	    ],
+	    [
+	      "Darwin",
+	      "30\u00b0",
+	      "Sunny."
+	    ]
+	  ]
+	}
+
+##Feel free to improve
+
+Not much of this is perfect, it comes from flaws in its quirky design, also the PHP could be improved.
+
+If you have some PHP experience in your legs and want to improve the code and/or add features, I'd gladly take changes (fork away!).

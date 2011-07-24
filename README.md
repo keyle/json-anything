@@ -61,6 +61,29 @@ Within #results, will return the 4th column, 2nd span, b's html
 
 ##Real world examples
 
+###Latest currencies $ from Reuters
+
+	index.php?url=http://uk.reuters.com/business/currencies&sel=%currPairs__td:first-child__a,%currPairs__td:first-child__a|href,%currPairs__td:nth- child(2)
+
+	{
+	  "url":"http://uk.reuters.com/business/currencies",
+	  "sel":"#currPairs td:first-child a,#currPairs td:first-child a|href,#currPairs td:nth-child(2)",
+	  "results":[
+	    [
+	      "GBP/USD",
+	      "/business/currencies/quote?srcAmt=1&srcCurr=GBP&destAmt=&destCurr=USD",
+	      "1.6299"
+	    ],
+	    [
+	      "GBP/EUR",
+	      "/business/currencies/quote?srcAmt=1&srcCurr=GBP&destAmt=&destCurr=EUR",
+	      "1.1348"
+	    ],
+
+	    ...
+	  ]
+	}
+
 ###Hacker News
 
 There is an unofficial api but anyway, this works too.
@@ -82,29 +105,6 @@ There is an unofficial api but anyway, this works too.
 	    [
 	      "Radio Shack to start stocking Arduino, Other Goodies",
 	      "http://blog.radioshack.com/2011/07/21/top-ten-diy-suggestions-from-you/"
-	    ],
-
-	    ...
-	  ]
-	}
-
-###Latest currencies $ from Reuters
-
-	index.php?url=http://uk.reuters.com/business/currencies&sel=%currPairs__td:first-child__a,%currPairs__td:first-child__a|href,%currPairs__td:nth- child(2)
-
-	{
-	  "url":"http://uk.reuters.com/business/currencies",
-	  "sel":"#currPairs td:first-child a,#currPairs td:first-child a|href,#currPairs td:nth-child(2)",
-	  "results":[
-	    [
-	      "GBP/USD",
-	      "/business/currencies/quote?srcAmt=1&srcCurr=GBP&destAmt=&destCurr=USD",
-	      "1.6299"
-	    ],
-	    [
-	      "GBP/EUR",
-	      "/business/currencies/quote?srcAmt=1&srcCurr=GBP&destAmt=&destCurr=EUR",
-	      "1.1348"
 	    ],
 
 	    ...

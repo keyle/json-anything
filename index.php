@@ -20,17 +20,17 @@ ini_set('user_agent', 'Mozilla/5.0 (Windows NT 6.1; U; ru; rv:5.0.1.6) Gecko/201
 
 require_once('phpQuery-onefile.php');
 
-if(!$_GET['url']) die('give a url param.');
+if(!$_REQUEST['url']) die('give a url param.');
 
-$_GET['url'] = filterNasty($_GET['url']);
-$url = $_GET['url'];
+$_REQUEST['url'] = filterNasty($_REQUEST['url']);
+$url = $_REQUEST['url'];
 
-if(!$_GET['sel']) die("give at least 1 selector, ie. ...?sel=.class__a");
+if(!$_REQUEST['sel']) die("give at least 1 selector, ie. ...?sel=.class__a");
 
-$_GET['sel'] = filterNasty($_GET['sel']);
-$sel = $_GET['sel'];
+$_REQUEST['sel'] = filterNasty($_REQUEST['sel']);
+$sel = $_REQUEST['sel'];
 
-$debug = isset($_GET['debug']) ? true : false;
+$debug = isset($_REQUEST['debug']) ? true : false;
 
 $sel = replaceThisByThatInThat('__', ' ', $sel);
 $sel = replaceThisByThatInThat('%', '#', $sel);
@@ -44,6 +44,20 @@ for ($i=0; $i < count($selectorsArr); $i++)
 	if(count($selectorsArr[$i]) < 2)
 		$selectorsArr[$i][1] = null;
 }
+
+/*
+$hasQuotes = strpos($url, '\'');
+
+if ($hasQuotes !== false) {
+	$url = replaceThisByThatInThat('\'', '', $url);
+}
+
+$hasDoubleQuotes = strpos($url, '\"');
+
+if ($hasDoubleQuotes !== false) {
+	$url = replaceThisByThatInThat('\"', '', $url);
+}*/
+
 $output = file_get_contents($url) or die('Could not access: ?url=...');
 
 phpQuery::newDocument($output);

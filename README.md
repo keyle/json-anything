@@ -1,7 +1,7 @@
 json-anything
 ----------------
 
-PHP proxy that converts webpages to json objects, filtered by jquery-like selectors.
+PHP proxy that converts webpages to json objects, filtered by jquery-like selectors (Built on top of PHPQuery).
 
 Takes parameters from GET or POST.
 

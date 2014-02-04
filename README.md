@@ -113,7 +113,7 @@ There is an unofficial api but anyway, this works too.
 
 ###Australia Bureau of Meteorology (bom)
 
-The bom is reknown for not having decent a api. 
+The bom is known for not having decent a api. 
 
 Take a look at its home page http://www.bom.gov.au/ ... We're going to grab the Forecast as presented for the major cities.
 
